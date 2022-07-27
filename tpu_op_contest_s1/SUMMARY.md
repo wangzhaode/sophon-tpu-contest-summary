@@ -24,6 +24,7 @@
       因此需要对 `pads != 0 & count_include_pad=false` 的case进行额外处理，处理思路有2种：1. 改变角落和边缘部分的kernel_size；
       2. 对avgpool的结果使用 [okk_bdc_mul_C](https://doc.sophgo.com/docs/3.0.0/docs_latest_release/okkernel/html/usage/refined.html#okk-bdc-mul-c)
       将结果乘以一个scale还原为不计算pad的值；
+      ![count_include_pad=false处理思路](https://github.com/wangzhaode/sophon-tpu-contest-summary/blob/main/imgs/count_include_pad.png)
     - case 1的 `stride_h = stride_w = 16` 是avgpool不支持的参数类型，对于这种情况，可以将计算沿着h和w方向分块实现；
 2. reducesum: 发现文档中并没有reduce函数，但是[avgpool](https://doc.sophgo.com/docs/3.0.0/docs_latest_release/okkernel/html/usage/refined.html#okk-bdc-avg-pool2d)
 可以实现reduce功能, 对结果执行[okk_bdc_mul_C](https://doc.sophgo.com/docs/3.0.0/docs_latest_release/okkernel/html/usage/refined.html#okk-bdc-mul-c)获得sum值。
